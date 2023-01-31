@@ -15,6 +15,9 @@ Stops and starts the docker containers. It does NOT delete any data.
 .PARAMETER PermanentlyRemove 
 Removes the docker containers and the folders of the app. Use with caution!
 
+.PARAMETER Dev 
+Used together with Start, makes sure the instance is prepared for local dev, by allowing current user to edit the files.
+
 .EXAMPLE
 PS> .\RunPlantanapp.ps1 -Start 
 .EXAMPLE
@@ -31,7 +34,8 @@ Param (
     [Parameter(Mandatory=$false)][switch]$Stop = $false,
     [Parameter(Mandatory=$false)][switch]$Reset = $false,
     [Parameter(Mandatory=$false)][switch]$Restart = $false,
-    [Parameter(Mandatory=$false)][switch]$PermanentlyRemove = $false
+    [Parameter(Mandatory=$false)][switch]$PermanentlyRemove = $false,
+    [Parameter(Mandatory=$false)][switch]$Dev = $false
 )
 
 $ErrorActionPreference = 'Stop'
@@ -107,6 +111,17 @@ if($Restart) {
     StartApp
 }
 
-if ((-not $Restart) -and (-not $Reset) -and (-not $Start) -and (-not $Stop) -and (-not $PermanentlyRemove)) {
+if ($Dev) {
+    # Grant permissions to current executing user
+    $userName = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+    Write-Output "Granting full permissions to current user [$userName] for current folder"
+    
+    $Acl = Get-Acl "./"
+    $Ar = New-Object System.Security.AccessControl.FileSystemAccessRule($userName, "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+    $Acl.AddAccessRule($Ar)
+    Set-Acl "./" $Acl
+}
+
+if ((-not $Restart) -and (-not $Reset) -and (-not $Start) -and (-not $Stop) -and (-not $PermanentlyRemove) -and (-not $Dev)) {
     Get-Help $PSCommandPath -Full
 }

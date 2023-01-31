@@ -5,7 +5,7 @@
 2. Go to the folder where you cloned the repository and open the **.env** file with a text editor.
    - For Windows 10 21H2 update, change the **windows_version** variable to look like `windows_version=21h2`.
    - For Windows Server 2019, change the **windows_version** variable to look like `windows_version=2019`
-   - For Windows Server 2022, change the **windows_version** variable to look like `windows_version=2022`
+   - For Windows Server 2022 or **Windows 11**, change the **windows_version** variable to look like `windows_version=2022`
 3. Go to the folder where you cloned the repository and open a powershell with admin privileges here.
 4. Type in: `.\RunPlantanapp.ps1 -Start` . This will automatically create the folders required and start the containers.
     - PS: Type only `.\RunPlantanapp.ps1` which will show you a helptext and examples of all parameters usage.

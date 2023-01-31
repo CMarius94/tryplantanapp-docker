@@ -31,4 +31,4 @@ services:
       - appnet
 networks:
   appnet:
-    name: plantanappNetwork
+    name: plantanappNetwork${iis_port}
